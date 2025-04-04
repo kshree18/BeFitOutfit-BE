@@ -2,7 +2,10 @@ services:
   - type: web
     name: befitoutfit-backend
     env: node
-    buildCommand: npm install && npx prisma generate
+    buildCommand: |
+      npm install
+      npx prisma generate
+      mysql -h $DB_HOST -u $DB_USER -p$DB_PASSWORD < prisma/init.sql
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
@@ -10,9 +13,20 @@ services:
           name: befitoutfit-db
           property: connectionString
           transform: |
-            if (!value.startsWith('mysql://')) {
-              value = 'mysql://' + value;
-            }
+            const url = new URL(value);
+            return `mysql://${url.username}:${url.password}@${url.hostname}:${url.port}${url.pathname}`;
+      - key: DB_HOST
+        fromDatabase:
+          name: befitoutfit-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: befitoutfit-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: befitoutfit-db
+          property: password
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
