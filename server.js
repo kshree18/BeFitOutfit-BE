@@ -5,6 +5,15 @@ const express = require('express')
 const path = require('path')
 const app = express();
 const port = process.env.PORT || 3000;
+const host = '0.0.0.0';  // Listen on all network interfaces
+
+// Increase timeout values
+app.use((req, res, next) => {
+    res.setTimeout(120000, () => {
+        res.status(408).send('Request Timeout');
+    });
+    next();
+});
 
 app.use(cors());
 app.use(morgan("dev"))
@@ -21,6 +30,6 @@ app.get('/', async (req, res) => {
 })
 routes(app)
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen(port, host, () => {
+    console.log(`Server is running on http://${host}:${port}`);
 });

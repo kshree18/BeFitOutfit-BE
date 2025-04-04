@@ -13,6 +13,14 @@ services:
         generateValue: true
       - key: PORT
         value: 3000
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+    autoDeploy: true
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    timeout: 120
 
 databases:
   - name: befitoutfit-db
