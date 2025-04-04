@@ -1,0 +1,9 @@
+runtime: nodejs18
+service: default
+vpc_access_connector:
+  name: projects/befitoutfit/locations/asia-southeast2/connectors/connect-to-sql
+handlers:
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto

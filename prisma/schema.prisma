@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @unique @default(autoincrement())
+  email      String      @unique
+  username   String      @unique
+  password   String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  AuthUsers  AuthUsers[]
+  Outfit Outfit[]
+
+  @@map("users")
+}
+
+model Role {
+  id         Int         @id @unique @default(autoincrement())
+  name       String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  AuthUsers  AuthUsers[]
+
+  @@map("roles")
+}
+
+model AuthUsers {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  roleId     Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  roles      Role     @relation(fields: [roleId], references: [id])
+  users      User     @relation(fields: [userId], references: [id])
+
+  @@map("auth_users")
+}
+model Outfit{
+  id Int @id @default(autoincrement())
+  userId Int
+  usersId User @relation( fields: [userId], references:[id])
+  nama String @db.VarChar(100)
+  event String @db.VarChar(50)
+  photo String
+  include Boolean @default(false)
+  percentage Int
+  type String @db.VarChar(30)
+  liked Boolean @default(false)
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  @@map("outfit")
+}

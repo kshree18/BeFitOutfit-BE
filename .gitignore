@@ -1,0 +1,12 @@
+node_modules
+# Keep environment variables out of version control
+.env
+prisma.js
+befit-skripsi-eb2b0eef249f.json
+befitoutfit-508985152d9c.json
+uploads/
+temp/
+*.log
+*.json
+!package.json
+!package-lock.json
