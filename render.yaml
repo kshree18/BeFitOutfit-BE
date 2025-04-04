@@ -9,6 +9,10 @@ services:
         fromDatabase:
           name: befitoutfit-db
           property: connectionString
+          transform: |
+            if (!value.startsWith('mysql://')) {
+              value = 'mysql://' + value;
+            }
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
